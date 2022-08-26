@@ -18,11 +18,11 @@ namespace MediatRSample.Application.Handlers
 
         public async Task<string> Handle(CadastraPessoaCommand request, CancellationToken cancellationToken)
         {
-            var pessoa = new Pessoa { Nome = request.Nome, Idade = request.Idade, Sexo = request.Sexo };
+            var pessoa = new Pessoa(nome: request.Nome, idade: request.Idade, sexo: request.Sexo);
 
             try
             {
-                pessoa = await _repository.Salvar(pessoa);
+                await _repository.Salvar(pessoa);
 
                 await _mediator.Publish(new PessoaCriadaNotification { Id = pessoa.Id, Nome = pessoa.Nome, Idade = pessoa.Idade, Sexo = pessoa.Sexo });
 

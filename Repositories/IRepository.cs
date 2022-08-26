@@ -1,12 +1,12 @@
 ﻿namespace MediatRSample.Repositories
 {
-    public interface IRepository<T>
+    public interface IRepository<T> 
     {
         Task<IEnumerable<T>> ObterTodos();
 
         Task<T> Obter(int id);
 
-        Task<T> Salvar(T item);
+        Task<int> Salvar(T item);
 
         Task Alterar(T item);
 

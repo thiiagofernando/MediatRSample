@@ -1,41 +1,49 @@
 ﻿using MediatRSample.Application.Models;
+using MediatRSample.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace MediatRSample.Repositories
 {
     public class PessoaRepository : IRepository<Pessoa>
     {
-        private static Dictionary<int, Pessoa> pessoas = new Dictionary<int, Pessoa>();
+        private readonly AplicacaoDbContext db;
+        public PessoaRepository(AplicacaoDbContext aplicacaoDbContext)
+        {
+            db = aplicacaoDbContext;
+        }
         public async Task Alterar(Pessoa pessoa)
         {
-            await Task.Run(() =>
-            {
-                pessoas.Remove(pessoa.Id);
-                pessoas.Add(pessoa.Id, pessoa);
-            });
+            db.pessoa.Update(pessoa);
+            await db.SaveChangesAsync();
         }
 
         public async Task Excluir(int id)
         {
-            await Task.Run(() => pessoas.Remove(id));
+            var pessoa = await db.pessoa.FindAsync(id);
+            if (pessoa!=null)
+            {
+                db.pessoa.Remove(pessoa);
+                await db.SaveChangesAsync(); 
+            }
         }
 
         public async Task<Pessoa> Obter(int id)
         {
-            return await Task.Run(() => pessoas.GetValueOrDefault(id));
+            return await db.pessoa.FindAsync(id);
         }
         public async Task<IEnumerable<Pessoa>> ObterTodos()
         {
-            return await Task.Run(() => pessoas.Values.ToList());
+            return await db.pessoa.ToListAsync();
         }
 
-        public async Task<Pessoa> Salvar(Pessoa pessoa)
+        public async Task<int> Salvar(Pessoa pessoa)
         {
-            return await Task.Run(() => {
-                var id = pessoas.Count() + 1;
-                pessoa.Id = id;
-                pessoas.Add(id, pessoa);
-                return pessoa;
-            });
+            db.pessoa.Add(pessoa);
+            return await db.SaveChangesAsync();
+        }
+        public void Dispose()
+        {
+            db?.Dispose();
         }
     }
 }

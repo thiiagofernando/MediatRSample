@@ -18,8 +18,10 @@ namespace MediatRSample.Application.Handlers
 
         public async Task<string> Handle(AlteraPessoaCommand request, CancellationToken cancellationToken)
         {
-            var pessoa = new Pessoa { Id = request.Id, Nome = request.Nome, Idade = request.Idade, Sexo = request.Sexo };
-
+            var pessoa = new Pessoa(nome: request.Nome, idade: request.Idade, sexo: request.Sexo)
+            {
+                Id = request.Id
+            };
             try
             {
                 await _repository.Alterar(pessoa);
