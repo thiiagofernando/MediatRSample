@@ -6,6 +6,7 @@ O projeto de uma API simples com um CRUD de pessoas, utilizando:
 - MediatR
 - CQRS(Command Query Responsibility Segregation)
 - Swagger 
+- Entity Framework Core
 - ASP.NET Core
 
 Onde dentro da pasta Application, temos as pastas:
@@ -40,6 +41,13 @@ Instale as dependências
 ```bash
   dotnet restore && dotnet build
 ```
+
+Conexão com o Banco
+
+```bash
+  Altere a ConnectionStrings do Banco de Dados SQL Server no arquivo appsettings.json
+```
+
 
 Inicie a API
 
